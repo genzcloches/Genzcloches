@@ -1,72 +1,28 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Checkout - Genzcloches</title>
   <script src="https://js.stripe.com/v3/"></script>
-  <link rel="stylesheet" href="style.css" />
   <style>
-    .checkout-form {
-      max-width: 400px;
-      margin: 2rem auto;
-      background: #1a1a1a;
-      padding: 2rem;
-      border-radius: 12px;
-    }
-    .checkout-form input {
-      width: 100%;
-      margin-bottom: 1rem;
-      padding: 0.75rem;
-      border: none;
-      border-radius: 8px;
-    }
-    #card-element {
-      background: white;
-      padding: 1rem;
-      border-radius: 8px;
-    }
-    button {
-      background: #00ffc8;
-      color: black;
-      padding: 0.75rem;
-      width: 100%;
-      border: none;
-      border-radius: 8px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-    button:hover {
-      background: #00c6a8;
-    }
+    body { font-family: sans-serif; padding: 2rem; max-width: 600px; margin: auto; }
+    input, button { width: 100%; padding: 0.6rem; margin: 0.5rem 0; border-radius: 5px; border: 1px solid #ccc; }
+    #card-element { border: 1px solid #ccc; padding: 1rem; border-radius: 5px; }
   </style>
 </head>
 <body>
-  <h2 style="text-align:center;">Checkout</h2>
-  <form class="checkout-form">
+  <h2>Checkout</h2>
+  <form id="payment-form">
     <input type="text" placeholder="Full Name" required />
     <input type="email" placeholder="Email" required />
     <input type="text" placeholder="Shipping Address" required />
-    <div id="card-element"></div>
+    <div id="card-element"><!--Stripe.js injects here--></div>
     <button type="submit">Pay Now</button>
   </form>
-
   <script>
-    const stripe = Stripe("pk_test_YOUR_KEY_HERE"); // Replace with your own publishable key
+    const stripe = Stripe('pk_test_YOUR_KEY_HERE');
     const elements = stripe.elements();
-    const card = elements.create("card");
-    card.mount("#card-element");
-
-    document.querySelector("form").addEventListener("submit", function(e) {
-      e.preventDefault();
-      stripe.createToken(card).then(result => {
-        if (result.error) {
-          alert(result.error.message);
-        } else {
-          alert("Payment token created: " + result.token.id);
-        }
-      });
-    });
+    const card = elements.create('card');
+    card.mount('#card-element');
   </script>
 </body>
 </html>
