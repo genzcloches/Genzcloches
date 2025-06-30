@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Checkout - Genzcloches</title>
+  <script src="https://js.stripe.com/v3/"></script>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .checkout-form {
+      max-width: 400px;
+      margin: 2rem auto;
+      background: #1a1a1a;
+      padding: 2rem;
+      border-radius: 12px;
+    }
+    .checkout-form input {
+      width: 100%;
+      margin-bottom: 1rem;
+      padding: 0.75rem;
+      border: none;
+      border-radius: 8px;
+    }
+    #card-element {
+      background: white;
+      padding: 1rem;
+      border-radius: 8px;
+    }
+    button {
+      background: #00ffc8;
+      color: black;
+      padding: 0.75rem;
+      width: 100%;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #00c6a8;
+    }
+  </style>
+</head>
+<body>
+  <h2 style="text-align:center;">Checkout</h2>
+  <form class="checkout-form">
+    <input type="text" placeholder="Full Name" required />
+    <input type="email" placeholder="Email" required />
+    <input type="text" placeholder="Shipping Address" required />
+    <div id="card-element"></div>
+    <button type="submit">Pay Now</button>
+  </form>
+
+  <script>
+    const stripe = Stripe("pk_test_YOUR_KEY_HERE"); // Replace with your own publishable key
+    const elements = stripe.elements();
+    const card = elements.create("card");
+    card.mount("#card-element");
+
+    document.querySelector("form").addEventListener("submit", function(e) {
+      e.preventDefault();
+      stripe.createToken(card).then(result => {
+        if (result.error) {
+          alert(result.error.message);
+        } else {
+          alert("Payment token created: " + result.token.id);
+        }
+      });
+    });
+  </script>
+</body>
+</html>
